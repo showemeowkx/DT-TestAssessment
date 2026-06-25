@@ -1,10 +1,16 @@
 export type QuestionType = "boolean" | "input" | "checkbox";
 
+export interface Variant {
+  text: string;
+  isCorrect: boolean;
+}
+
 export interface Question {
   id?: string;
+  title: string;
   type: QuestionType;
-  text: string;
-  options?: string[];
+  answer?: string | null;
+  variants?: Variant[];
 }
 
 export interface Quiz {
