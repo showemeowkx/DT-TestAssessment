@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { VariantModule } from './variant/variant.module';
@@ -31,7 +29,5 @@ import { VariantModule } from './variant/variant.module';
     QuestionModule,
     VariantModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
