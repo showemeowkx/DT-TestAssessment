@@ -64,7 +64,6 @@ export default function QuizDetailPage() {
               </span>
             </div>
 
-            {/* Read-Only Previews */}
             <div className="mt-4 pl-6 border-l-2 border-gray-100 pointer-events-none opacity-60">
               {q.type === "boolean" && (
                 <div className="space-y-2">
