@@ -31,6 +31,9 @@ export class Question {
   @JoinColumn({ name: 'quizId' })
   quiz: Quiz;
 
-  @OneToMany(() => Variant, (variant) => variant.question, { cascade: true })
+  @OneToMany(() => Variant, (variant) => variant.question, {
+    cascade: true,
+    nullable: true,
+  })
   variants: Variant[];
 }
