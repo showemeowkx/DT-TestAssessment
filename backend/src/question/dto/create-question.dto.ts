@@ -6,8 +6,12 @@ import {
   MaxLength,
   IsEnum,
   IsOptional,
+  ValidateNested,
+  IsArray,
 } from 'class-validator';
 import { QuestionTypeEnum } from '../questionType.enum';
+import { CreateVariantDto } from 'src/variant/dto/create-variant.dto';
+import { Type } from 'class-transformer';
 
 export class CreateQuestionDto {
   @IsNotEmpty()
@@ -23,4 +27,10 @@ export class CreateQuestionDto {
   @IsOptional()
   @IsString()
   answer?: string | null;
+
+  @IsNotEmpty()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateVariantDto)
+  variants: CreateVariantDto[];
 }
