@@ -71,7 +71,7 @@ export default function QuizDetailPage() {
                     <input
                       type="radio"
                       readOnly
-                      checked={q.answer === "true"}
+                      checked={false}
                       className="w-4 h-4 text-blue-600"
                     />
                     <span className="text-gray-700">True</span>
@@ -80,7 +80,7 @@ export default function QuizDetailPage() {
                     <input
                       type="radio"
                       readOnly
-                      checked={q.answer === "false"}
+                      checked={false}
                       className="w-4 h-4 text-blue-600"
                     />
                     <span className="text-gray-700">False</span>
@@ -92,11 +92,7 @@ export default function QuizDetailPage() {
                 <input
                   type="text"
                   readOnly
-                  placeholder={
-                    q.answer
-                      ? `Correct answer: ${q.answer}`
-                      : "Short answer text..."
-                  }
+                  placeholder="Short answer text..."
                   className="w-full border-gray-300 border p-2 rounded-md bg-gray-50"
                 />
               )}
@@ -108,7 +104,7 @@ export default function QuizDetailPage() {
                       <input
                         type="checkbox"
                         readOnly
-                        checked={opt.isCorrect}
+                        checked={false}
                         className="w-4 h-4 text-blue-600 rounded"
                       />
                       <span className="text-gray-700">{opt.text}</span>
