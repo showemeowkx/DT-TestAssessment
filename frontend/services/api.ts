@@ -1,12 +1,13 @@
 import type { Quiz, QuizCreatePayload } from "./types";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export const api = {
   getQuizzes: async (): Promise<Quiz[]> => {
     const res = await fetch(`${API_BASE}/quizzes`);
     if (!res.ok) throw new Error("Failed to fetch quizzes");
-    return res.json();
+    const response = await res.json();
+    return response.data || [];
   },
 
   getQuiz: async (id: string): Promise<Quiz> => {
