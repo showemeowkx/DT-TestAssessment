@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Question } from './entities/question.entity';
 import { CreateQuestionDto } from './dto/create-question.dto';
+import { Quiz } from 'src/quiz/entities/quiz.entity';
 
 @Injectable()
 export class QuestionService {
@@ -13,9 +14,24 @@ export class QuestionService {
     private questionRepository: Repository<Question>,
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDto): Promise<void> {
-    const question = this.questionRepository.create(createQuestionDto);
-    await this.questionRepository.save(question);
-    this.logger.log(`Question created: ${question.id}`);
+  async create(
+    createQuestionDto: CreateQuestionDto,
+    quiz: Quiz,
+    manager?: EntityManager,
+  ): Promise<Question> {
+    const repository = manager
+      ? manager.getRepository(Question)
+      : this.questionRepository;
+
+    const question = repository.create({
+      title: createQuestionDto.title,
+      type: createQuestionDto.type,
+      answer: createQuestionDto.answer ?? null,
+      quiz,
+    });
+
+    const saved = await repository.save(question);
+    this.logger.log(`Question created: ${saved.id}`);
+    return saved;
   }
 }

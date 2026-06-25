@@ -1,7 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { CreateQuizDto } from './dto/create-quiz.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { QuestionService } from 'src/question/question.service';
+import { VariantService } from 'src/variant/variant.service';
+import { CreateQuizDto } from './dto/create-quiz.dto';
 import { Quiz } from './entities/quiz.entity';
 
 @Injectable()
@@ -11,12 +13,32 @@ export class QuizService {
   constructor(
     @InjectRepository(Quiz)
     private quizRepository: Repository<Quiz>,
+    private dataSource: DataSource,
+    private questionService: QuestionService,
+    private variantService: VariantService,
   ) {}
 
   async create(createQuizDto: CreateQuizDto): Promise<void> {
-    const quiz = this.quizRepository.create(createQuizDto);
-    await this.quizRepository.save(quiz);
-    this.logger.log(`Quiz created: ${quiz.id}`);
+    await this.dataSource.transaction(async (manager) => {
+      const quiz = await manager.save(
+        manager.create(Quiz, { title: createQuizDto.title }),
+      );
+      this.logger.log(`Quiz created: ${quiz.id}`);
+
+      for (const questionDto of createQuizDto.questions) {
+        const question = await this.questionService.create(
+          questionDto,
+          quiz,
+          manager,
+        );
+
+        if (questionDto.variants?.length) {
+          for (const variantDto of questionDto.variants) {
+            await this.variantService.create(variantDto, question, manager);
+          }
+        }
+      }
+    });
   }
 
   async findAll(): Promise<Quiz[]> {
