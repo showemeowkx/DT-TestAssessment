@@ -50,6 +50,9 @@ export class QuizService {
     if (!quiz) {
       throw new NotFoundException(`Quiz with id ${id} not found`);
     }
+    const questions = await this.questionService.findByQuizId(quiz.id);
+    quiz.questions = questions;
+
     return quiz;
   }
 

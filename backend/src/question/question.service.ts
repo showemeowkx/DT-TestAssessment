@@ -4,6 +4,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { Question } from './entities/question.entity';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Quiz } from 'src/quiz/entities/quiz.entity';
+import { VariantService } from 'src/variant/variant.service';
 
 @Injectable()
 export class QuestionService {
@@ -12,6 +13,7 @@ export class QuestionService {
   constructor(
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
+    private variantService: VariantService,
   ) {}
 
   async create(
@@ -33,5 +35,16 @@ export class QuestionService {
     const saved = await repository.save(question);
     this.logger.log(`Question created: ${saved.id}`);
     return saved;
+  }
+
+  async findByQuizId(quizId: number): Promise<Question[]> {
+    const questions = await this.questionRepository.find({ where: { quizId } });
+
+    for (const question of questions) {
+      const variants = await this.variantService.findByQuestionId(question.id);
+      question.variants = variants;
+    }
+
+    return questions;
   }
 }
