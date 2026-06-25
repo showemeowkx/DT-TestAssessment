@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { Quiz } from './entities/quiz.entity';
+import { GetQuizzesDto } from './dto/get-quizzes.dto';
 
 @Controller('quizzes')
 export class QuizController {
@@ -13,8 +22,13 @@ export class QuizController {
   }
 
   @Get()
-  findAll(): Promise<Quiz[]> {
-    return this.quizService.findAll();
+  findAll(@Query() getQuizzesDto: GetQuizzesDto): Promise<{
+    data: Quiz[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    return this.quizService.findAll(getQuizzesDto);
   }
 
   @Get(':id')
