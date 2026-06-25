@@ -5,6 +5,7 @@ import { QuestionService } from 'src/question/question.service';
 import { VariantService } from 'src/variant/variant.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { Quiz } from './entities/quiz.entity';
+import { GetQuizzesDto } from './dto/get-quizzes.dto';
 
 @Injectable()
 export class QuizService {
@@ -41,8 +42,26 @@ export class QuizService {
     });
   }
 
-  async findAll(): Promise<Quiz[]> {
-    return this.quizRepository.find();
+  async findAll(getQuizzesDto: GetQuizzesDto): Promise<{
+    data: Quiz[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const page = getQuizzesDto.page || 1;
+    const limit = getQuizzesDto.limit || 10;
+
+    const [quizzes, total] = await this.quizRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data: quizzes,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: number): Promise<Quiz> {
@@ -50,6 +69,9 @@ export class QuizService {
     if (!quiz) {
       throw new NotFoundException(`Quiz with id ${id} not found`);
     }
+    const questions = await this.questionService.findByQuizId(quiz.id);
+    quiz.questions = questions;
+
     return quiz;
   }
 

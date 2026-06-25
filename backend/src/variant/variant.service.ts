@@ -33,4 +33,11 @@ export class VariantService {
     this.logger.log(`Variant created: ${saved.id}`);
     return saved;
   }
+
+  async findByQuestionId(questionId: number): Promise<Variant[]> {
+    const variants = await this.variantRepository.find({
+      where: { questionId },
+    });
+    return variants;
+  }
 }
