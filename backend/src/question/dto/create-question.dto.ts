@@ -5,6 +5,7 @@ import {
   MinLength,
   MaxLength,
   IsEnum,
+  IsOptional,
 } from 'class-validator';
 import { QuestionTypeEnum } from '../questionType.enum';
 
@@ -18,4 +19,8 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   @IsEnum(QuestionTypeEnum)
   type: QuestionTypeEnum;
+
+  @IsOptional()
+  @IsString()
+  answer?: string | null;
 }

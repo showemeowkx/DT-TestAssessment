@@ -13,10 +13,9 @@ export class QuestionService {
     private questionRepository: Repository<Question>,
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDto): Promise<Question> {
+  async create(createQuestionDto: CreateQuestionDto): Promise<void> {
     const question = this.questionRepository.create(createQuestionDto);
     await this.questionRepository.save(question);
     this.logger.log(`Question created: ${question.id}`);
-    return question;
   }
 }

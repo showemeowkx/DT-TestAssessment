@@ -4,9 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { QuestionTypeEnum } from '../questionType.enum';
+import { Variant } from 'src/variant/entities/variant.entity';
 
 @Entity()
 export class Question {
@@ -19,10 +21,16 @@ export class Question {
   @Column({ type: 'enum', enum: QuestionTypeEnum })
   type: QuestionTypeEnum;
 
+  @Column({ type: 'varchar', nullable: true })
+  answer: string | null;
+
   @Column()
   quizId: number;
 
-  @ManyToOne(() => Quiz, (quiz) => quiz.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Quiz, (quiz) => quiz.questions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'quizId' })
   quiz: Quiz;
+
+  @OneToMany(() => Variant, (variant) => variant.question, { cascade: true })
+  variants: Variant[];
 }
