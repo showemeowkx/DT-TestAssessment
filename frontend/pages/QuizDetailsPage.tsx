@@ -57,7 +57,7 @@ export default function QuizDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-800">
                 <span className="text-gray-400 mr-2">{index + 1}.</span>{" "}
-                {q.text}
+                {q.title}
               </h3>
               <span className="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded uppercase tracking-wider">
                 {q.type}
@@ -71,7 +71,7 @@ export default function QuizDetailPage() {
                     <input
                       type="radio"
                       readOnly
-                      checked={false}
+                      checked={q.answer === "true"}
                       className="w-4 h-4 text-blue-600"
                     />
                     <span className="text-gray-700">True</span>
@@ -80,7 +80,7 @@ export default function QuizDetailPage() {
                     <input
                       type="radio"
                       readOnly
-                      checked={false}
+                      checked={q.answer === "false"}
                       className="w-4 h-4 text-blue-600"
                     />
                     <span className="text-gray-700">False</span>
@@ -92,22 +92,26 @@ export default function QuizDetailPage() {
                 <input
                   type="text"
                   readOnly
-                  placeholder="Short answer text..."
+                  placeholder={
+                    q.answer
+                      ? `Correct answer: ${q.answer}`
+                      : "Short answer text..."
+                  }
                   className="w-full border-gray-300 border p-2 rounded-md bg-gray-50"
                 />
               )}
 
-              {q.type === "checkbox" && q.options && (
+              {q.type === "checkbox" && q.variants && (
                 <div className="space-y-2">
-                  {q.options.map((opt, i) => (
+                  {q.variants.map((opt, i) => (
                     <label key={i} className="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         readOnly
-                        checked={false}
+                        checked={opt.isCorrect}
                         className="w-4 h-4 text-blue-600 rounded"
                       />
-                      <span className="text-gray-700">{opt}</span>
+                      <span className="text-gray-700">{opt.text}</span>
                     </label>
                   ))}
                 </div>
