@@ -71,6 +71,10 @@ export default function QuizListPage() {
                 <h2 className="text-xl font-semibold text-gray-800">
                   {quiz.title}
                 </h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  {quiz.questions?.length || 0}{" "}
+                  {quiz.questions?.length === 1 ? "Question" : "Questions"}
+                </p>
               </div>
 
               <button

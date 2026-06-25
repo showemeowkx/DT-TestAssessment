@@ -1,10 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Question } from 'src/question/entities/question.entity';
 
 @Entity()
@@ -17,7 +11,4 @@ export class Quiz {
 
   @OneToMany(() => Question, (question) => question.quiz, { cascade: true })
   questions: Question[];
-
-  @CreateDateColumn()
-  createdAt: Date;
 }

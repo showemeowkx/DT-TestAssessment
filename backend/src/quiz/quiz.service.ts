@@ -54,6 +54,7 @@ export class QuizService {
     const [quizzes, total] = await this.quizRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
+      relations: { questions: true },
     });
 
     return {
