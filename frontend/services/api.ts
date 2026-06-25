@@ -16,14 +16,19 @@ export const api = {
     return res.json();
   },
 
-  createQuiz: async (payload: QuizCreatePayload): Promise<Quiz> => {
+  createQuiz: async (payload: QuizCreatePayload): Promise<void> => {
     const res = await fetch(`${API_BASE}/quizzes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error("Failed to create quiz");
-    return res.json();
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      throw new Error(errorData?.message || "Failed to create quiz");
+    }
+
+    return;
   },
 
   deleteQuiz: async (id: string): Promise<void> => {

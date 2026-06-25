@@ -57,7 +57,7 @@ export default function QuizDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-800">
                 <span className="text-gray-400 mr-2">{index + 1}.</span>{" "}
-                {q.text}
+                {q.title}
               </h3>
               <span className="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded uppercase tracking-wider">
                 {q.type}
@@ -97,9 +97,9 @@ export default function QuizDetailPage() {
                 />
               )}
 
-              {q.type === "checkbox" && q.options && (
+              {q.type === "checkbox" && q.variants && (
                 <div className="space-y-2">
-                  {q.options.map((opt, i) => (
+                  {q.variants.map((opt, i) => (
                     <label key={i} className="flex items-center space-x-2">
                       <input
                         type="checkbox"
@@ -107,7 +107,7 @@ export default function QuizDetailPage() {
                         checked={false}
                         className="w-4 h-4 text-blue-600 rounded"
                       />
-                      <span className="text-gray-700">{opt}</span>
+                      <span className="text-gray-700">{opt.text}</span>
                     </label>
                   ))}
                 </div>
