@@ -6,8 +6,14 @@ import {
   MaxLength,
   IsEnum,
   IsOptional,
+  ValidateNested,
+  IsArray,
+  Validate,
 } from 'class-validator';
 import { QuestionTypeEnum } from '../questionType.enum';
+import { CreateVariantDto } from 'src/variant/dto/create-variant.dto';
+import { Type } from 'class-transformer';
+import { QuestionTypeValidator } from '../validators/question-type.validator';
 
 export class CreateQuestionDto {
   @IsNotEmpty()
@@ -23,4 +29,13 @@ export class CreateQuestionDto {
   @IsOptional()
   @IsString()
   answer?: string | null;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateVariantDto)
+  variants?: CreateVariantDto[];
+
+  @Validate(QuestionTypeValidator)
+  private readonly _typeCheck?: never;
 }
